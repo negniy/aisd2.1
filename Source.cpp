@@ -53,6 +53,22 @@ void print_tree(BT* tree) {
 	tree->print();
 }
 
+void task() {
+
+}
+
+void delete_item() {
+
+}
+
+void delete_tree() {
+
+}
+
+void create_tree() {
+
+
+}
 
 int main() {
 	{
@@ -99,20 +115,19 @@ int main() {
 				
 				break;
 			case 52:
-				
+				task();
 				break;
 			case 53:
-				
+				menu_2();
 				break;
 			case 77:
-
+				if (cur <= 1) cur++;
 				break;
 			case 75:
-
+				if(cur>=0) cur--;
 				break;
 			case 27:
 				return 0;
-				break;
 			}
 		}
 	}

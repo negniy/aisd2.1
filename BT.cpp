@@ -8,7 +8,7 @@ void BT::obhod(BinTree* root) const
 {
 	if (root) {
 		obhod(root->left);
-		cout << root->data;
+		cout << root->data<< ", ";
 		obhod(root->right);
 	}
 }
