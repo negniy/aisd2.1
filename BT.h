@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdio.h>
+using namespace std;
 /*Класс должен представлять собой двоичное дерево поиска.
 Стандартные контейнеры в качестве полей класса не использовать.
 
@@ -35,14 +36,16 @@ class BT
 private:
 	BinTree* root;
 	void obhod(BinTree* root) const;
-	bool fobhod(BinTree* root, int key) const;
+	BinTree* fobhod(BinTree* root, int key) const;
 public:
 	BT(int value);
+	BinTree* create_as(const BinTree* copy) const;
 	BT(const BinTree& obj);
 	BinTree operator= (const BinTree& obj);
 	void print() const;
 	bool insert(int key);
 	bool contains(int key) const;
+	BinTree* find_prev(BinTree* tree, BinTree* elem) const;
 	bool erase(int key);
 	void delete_all(BinTree* r);
 	~BT();
