@@ -78,7 +78,8 @@ void peresech(BT* tree1, BT* tree2) {
 	}
 	cout << "Пересечение равно:\n";
 	for (int i = 0; i < size; i++) {
-		if(tree2->contains(array[i])) cout << array[i] << " ";
+		if(tree2->contains(array[i])) cout << array[i] << " /";
+		cout << array[i];
 	}
 }
 
@@ -105,10 +106,10 @@ void task(BT* tree1, BT* tree2) {
 	system("cls");
 	cout << "Первое дерево: \n";
 	print_tree(tree1);
-	cout << "Второе дерево: \n";
+	cout << "\nВторое дерево: \n";
 	print_tree(tree2);
 
-	std::cout << "Выберите действие:\n";
+	std::cout << "\nВыберите действие:\n";
 	std::cout << "[1] - Найти пересечение\n";
 	std::cout << "[2] - Найти разность\n";
 
@@ -285,7 +286,8 @@ int main() {
 				else cout << "Удаление невозможно\n"; get_key();
 				break;
 			case 53:
-				task(array[0], array[1]);
+				if (cur > -1 && cur < 2) task(array[0], array[1]);
+				else cout << "Нет деревьев\n"; get_key();
 				break;
 			case 54:
 				menu_2();

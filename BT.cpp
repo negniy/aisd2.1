@@ -13,57 +13,56 @@
 using namespace std;
 
 
-int* BT::get_items(BinTree* r) const
+/*int* BT::get_items(BinTree* r) const
 {
-	if (root) {
-		int a = root->data;
+	if (r) {
+
 		int size1 = 0;
 		int size2 = 0;
 
-		if (root->left != NULL) {
-			size1 = sizeof(get_items(root->left)) / sizeof(get_items(root->left)[0]);
+		if (r->left != NULL) {
+			size1 = sizeof(get_items(r->left)) / sizeof(get_items(r->left)[0]);
 		}
-		if (root->right != NULL) {
-			size2 = sizeof(get_items(root->right)) / sizeof(get_items(root->right)[0]);
+		if (r->right != NULL) {
+			size2 = sizeof(get_items(r->right)) / sizeof(get_items(r->right)[0]);
 		}
 
 		int* array = new int[size1 + size2 + 1];
-		array[0] = a;
+		array[0] = r->data;
 
 		for (int i = 0; i < size1; i++) {
-			array[i + 1] = get_items(root->left)[i];
+			array[i + 1] = get_items(r->left)[i];
 		}
-		if (root->left != NULL) {
-			delete[] get_items(root->left);
-		}
+		
 
 		for (int i = 0; i < size2; i++) {
-			array[i + 1 + size1] = get_items(root->right)[i];
+			array[i + 1 + size1] = get_items(r->right)[i];
 		}
-		if (root->right != NULL) {
-			delete[] get_items(root->right);
+		
+		cout << " ";
+		for (int i = 0; i < size1 + size2 + 1; i++) {
+			cout << array[i] ;
 		}
-
 		return array;
 	}
 	return NULL;
-}
+}*/
 
-void BT::obhod(BinTree* root) const
+void BT::obhod(BinTree* r) const
 {
-	if (root) {
-		obhod(root->left);
-		cout << root->data<< " ";
-		obhod(root->right);
+	if (r) {
+		obhod(r->left);
+		cout << r->data<< " ";
+		obhod(r->right);
 	}
 }
 
-BinTree* BT::fobhod(BinTree* root, int key) const
+BinTree* BT::fobhod(BinTree* r, int key) const
 {
-	if (root) {
-		if (key == root->data) return root;
-		BinTree* a = fobhod(root->left, key);
-		BinTree* b = fobhod(root->right, key);
+	if (r) {
+		if (key == r->data) return root;
+		BinTree* a = fobhod(r->left, key);
+		BinTree* b = fobhod(r->right, key);
 		if (a != NULL) return a;
 		else {
 			if (b != NULL) return b;
@@ -182,17 +181,21 @@ bool BT::contains(int key) const
 	return false;
 }
 
+void power(BinTree* r, int counter) {
+
+}
+
 int* BT::get_items() const
 {
 	return get_items(root);
 }
 
-BinTree* BT::find_prev(BinTree* root, BinTree* elem) const
+BinTree* BT::find_prev(BinTree* r, BinTree* elem) const
 {
-	if (root) {
+	if (r) {
 		if (elem == root->left || elem == root->right) return root;
-		BinTree* a = find_prev(root->left, elem);
-		BinTree* b = find_prev(root->right, elem);
+		BinTree* a = find_prev(r->left, elem);
+		BinTree* b = find_prev(r->right, elem);
 		if (a != NULL) return a;
 		else {
 			if (b != NULL) return b;
