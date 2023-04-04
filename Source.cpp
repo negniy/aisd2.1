@@ -1,4 +1,5 @@
 #include "BT.h"
+#include "errors.h"
 #include "stdio.h"
 #include <stdlib.h>
 #include <string>
@@ -20,6 +21,17 @@ using namespace std;
 5. Распечатку элементов проводить с помощью range - based for loop(for (auto i : v) { }).
 
 */
+
+int check() {
+	int a = 0;
+	while (!(cin >> a) || (cin.peek() != '\n'))
+	{
+		cin.clear();
+		while (cin.get() != '\n');
+		cout << "\nНеверное значение\n";
+	}
+	return a;
+}
 
 int get_key()
 {
@@ -57,17 +69,72 @@ void task() {
 
 }
 
-void delete_item() {
+bool delete_item(BT* tree) {
+
+	system("cls");
+	cout << "Введите элемент, который хотите удалить в дереве: \n";
+	bool flag;
+	int i_v = check();
+
+	while (tree->contains(i_v) == false)
+	{
+		cout << "Такого элемента нет в дереве\n";
+		i_v = check();
+	}
+
+	flag = tree->erase(i_v);
+	return flag;
+}
+
+void delete_tree(BT* tree) {
+
+	delete tree;
+}
+
+BT* create_tree() {
+	system("cls");
+	cout << "Введите кол-во элементов в дереве: \n";
+	int n = check();
+	while (n < 1)
+	{
+		cout << "Неверное значение\n";
+		n = check();
+	}
+
+	cout << "Введите значение корня: \n";
+	int r_v = check();
+
+	BT* tree = new BT(r_v);
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		cout << "Введите значение:\n" ;
+		int i_v = check();
+		while (tree->insert(i_v) == false)
+		{
+			cout << "Значение уже существует, повторите ввод\n" ;
+			i_v = check();
+		}
+	}
+	return tree;
 
 }
 
-void delete_tree() {
+void add_item(BT* tree) {
 
-}
+	system("cls");
+	cout << "Введите элемент, который хотите добавить в дерево: \n";
 
-void create_tree() {
+	int i_v = check();
 
+	while (!tree->insert(i_v)) {
 
+		cout << "Такой элемент уже есть в дереве, повторите попытку\n";
+		int i_v = check();
+
+	}
+
+	cout << "Элемент успешно вставлен в дерево\n";
 }
 
 int main() {
@@ -75,28 +142,31 @@ int main() {
 		SetConsoleCP(1251);
 		SetConsoleOutputCP(1251);
 		setlocale(LC_ALL, "RUS");
+
+		BT** array = new BT * [2];
+		int size = 0;
+		int cur = -1;
+
 		while (true) {
+
 			system("cls");
 			std::cout << "Меню 1:\n";
 			std::cout << "[1] - Создать дерево(до 2х деревьев может существовать одновременно)\n";
-			std::cout << "[2] - Удалить текущее дерево\n";
-			std::cout << "[3] - Удалить элемент в дереве\n";
-			std::cout << "[4] - Выполнить задание\n";
-			std::cout << "[5] - Результаты тестов\n";
+			std::cout << "[2] - Добавить элемент в дерево\n";
+			std::cout << "[3] - Удалить текущее дерево\n";
+			std::cout << "[4] - Удалить элемент в дереве\n";
+			std::cout << "[5] - Выполнить задание\n";
+			std::cout << "[6] - Результаты тестов\n";
 			std::cout << "[->] - Следующее дерево\n";//77
 			std::cout << "[<-] - Предыдущее дерево\n";//75
 			std::cout << "[ESC] - Выход\n";
 
-			BT* array[2];
-			int size = 0;
-			int cur = -1;
-
-			if (cur < 0) {
+			if (size == 0) {
 				std::cout << "Нет деревьев\n";
 			}
 			else {
 				if (cur >= size) {
-					std::cout << "Добавлено максимальное количество деревьев\n";
+					cur--;
 				}
 				else print_tree(array[cur]);
 			}
@@ -106,29 +176,72 @@ int main() {
 			switch (m)
 			{
 			case 49:
-				
+				if (size == 2) cout << "Добавлено максимальное количество деревьев\n";
+				else { 
+					size++;
+					cur++;
+					array[cur] = create_tree();
+				}
 				break;
 			case 50:
-				
+				if (cur > -1 && cur < 2) {
+					add_item(array[cur]);
+				}
+				else cout << "Добавление невозможно\n"; get_key();
 				break;
 			case 51:
-				
+				if (cur > -1 && cur < 2) {
+					delete_tree(array[cur]);
+					array[cur] = NULL;
+					if (cur == 0) {
+						array[cur] = array[cur + 1];
+						array[cur + 1] = NULL;
+					}
+					else cur--;
+					size--;
+				}
+				else cout << "Удаление невозможно\n"; get_key();
 				break;
 			case 52:
-				task();
+				if (cur > -1 && cur < 2) {
+					try {
+						if(delete_item(array[cur])) cout << "Удаление прошло успешно\n";
+						else cout << "Произошла ошибка\n";
+					}
+					catch (error smth_bad) {
+						cout << "Дерево было удалено, так как удалён корень\n";
+						get_key();
+						array[cur] = NULL;
+						if (cur == 0) {
+							array[cur] = array[cur + 1];
+							array[cur + 1] = NULL;
+						}
+						else cur--;
+						size--;
+					}
+				}
+				else cout << "Удаление невозможно\n"; get_key();
 				break;
 			case 53:
+				task();
+				break;
+			case 54:
 				menu_2();
 				break;
 			case 77:
-				if (cur <= 1) cur++;
+				if (cur < 1) cur++;
 				break;
 			case 75:
-				if(cur>=0) cur--;
+				if(cur > 0) cur--;
 				break;
 			case 27:
+				for (int i = 0; i < size; i++) {
+					delete[] array[i];
+				}
+				delete[] array;
 				return 0;
 			}
+
 		}
 	}
 }

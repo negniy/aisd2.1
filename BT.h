@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdio.h>
+#include "errors.h"
 using namespace std;
 /*Класс должен представлять собой двоичное дерево поиска.
 Стандартные контейнеры в качестве полей класса не использовать.

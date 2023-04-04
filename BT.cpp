@@ -1,4 +1,5 @@
 #include "BT.h"
+#include "errors.h"
 #include <iostream>
 #include <stdio.h>
 using namespace std;
@@ -8,7 +9,7 @@ void BT::obhod(BinTree* root) const
 {
 	if (root) {
 		obhod(root->left);
-		cout << root->data<< ", ";
+		cout << root->data<< " ";
 		obhod(root->right);
 	}
 }
@@ -126,7 +127,6 @@ bool BT::insert(int key)
 		}
 		if (key == tmp->data)
 		{
-			cout << "Already existed";
 			return false;
 		}
 	}
@@ -158,6 +158,11 @@ bool BT::erase(int key)
 	BinTree* p = fobhod(root, key);
 
 	if (p == NULL) return false;
+
+	if (p == root) {
+		delete root;
+		throw error("ÁÅÄÀ, ÌÛ ÓÄÀËÈËÈ ÄÅÐÅÂÎ!");
+	}
 
 	if (p->left != NULL && p->right != NULL)
 	{
