@@ -65,8 +65,70 @@ void print_tree(BT* tree) {
 	tree->print();
 }
 
-void task() {
+void peresech(BT* tree1, BT* tree2) {
 
+	int* array = tree1->get_items();
+	int size = 0;
+	if (array != NULL) {
+		size = sizeof(array) / sizeof(array[0]);
+	}
+	else {
+		cout << "Пересечение равно пустому множеству\n";
+		return;
+	}
+	cout << "Пересечение равно:\n";
+	for (int i = 0; i < size; i++) {
+		if(tree2->contains(array[i])) cout << array[i] << " ";
+	}
+}
+
+void raznost(BT* tree1, BT* tree2) {
+
+	int* array = tree1->get_items();
+	int size = 0;
+	if (array != NULL) {
+		size = sizeof(array) / sizeof(array[0]);
+	}
+	else {
+		cout << "Разность равна:\n";
+		print_tree(tree1);
+		return;
+	}
+	cout << "Разность равна:\n";
+	for (int i = 0; i < size; i++) {
+		if (!tree2->contains(array[i])) cout << array[i] << " ";
+	}
+}
+
+void task(BT* tree1, BT* tree2) {
+
+	system("cls");
+	cout << "Первое дерево: \n";
+	print_tree(tree1);
+	cout << "Второе дерево: \n";
+	print_tree(tree2);
+
+	std::cout << "Выберите действие:\n";
+	std::cout << "[1] - Найти пересечение\n";
+	std::cout << "[2] - Найти разность\n";
+
+	int m = get_key();
+
+	switch (m)
+	{
+	case 49:
+		peresech(tree1, tree2);
+		break;
+	case 50:
+		std::cout << "Выберите действие:\n";
+		std::cout << "[1] - Вычесть из первого множества второе\n";
+		std::cout << "[2] - Вычесть из второго множества первое\n";
+		int m1 = get_key();
+		if (m1 == 49) raznost(tree1, tree2);
+		if (m1 == 50) raznost(tree2, tree1);
+		break;
+	}
+	get_key();
 }
 
 bool delete_item(BT* tree) {
@@ -223,7 +285,7 @@ int main() {
 				else cout << "Удаление невозможно\n"; get_key();
 				break;
 			case 53:
-				task();
+				task(array[0], array[1]);
 				break;
 			case 54:
 				menu_2();

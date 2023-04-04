@@ -1,6 +1,14 @@
 #pragma once
+#include "stdio.h"
+#include <stdlib.h>
+#include <string>
+#include <ctype.h>
+#include <math.h>
+#include <locale.h>
+#include <windows.h>
+#include <conio.h>
+#include <time.h>
 #include <iostream>
-#include <stdio.h>
 #include "errors.h"
 using namespace std;
 /*Класс должен представлять собой двоичное дерево поиска.
@@ -38,6 +46,7 @@ private:
 	BinTree* root;
 	void obhod(BinTree* root) const;
 	BinTree* fobhod(BinTree* root, int key) const;
+	int* get_items(BinTree* r) const;
 public:
 	BT(int value);
 	BinTree* create_as(const BinTree* copy) const;
@@ -46,6 +55,7 @@ public:
 	void print() const;
 	bool insert(int key);
 	bool contains(int key) const;
+	int* get_items() const;
 	BinTree* find_prev(BinTree* tree, BinTree* elem) const;
 	bool erase(int key);
 	void delete_all(BinTree* r);

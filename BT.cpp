@@ -1,9 +1,53 @@
 #include "BT.h"
 #include "errors.h"
+#include "stdio.h"
+#include <stdlib.h>
+#include <string>
+#include <ctype.h>
+#include <math.h>
+#include <locale.h>
+#include <windows.h>
+#include <conio.h>
+#include <time.h>
 #include <iostream>
-#include <stdio.h>
 using namespace std;
 
+
+int* BT::get_items(BinTree* r) const
+{
+	if (root) {
+		int a = root->data;
+		int size1 = 0;
+		int size2 = 0;
+
+		if (root->left != NULL) {
+			size1 = sizeof(get_items(root->left)) / sizeof(get_items(root->left)[0]);
+		}
+		if (root->right != NULL) {
+			size2 = sizeof(get_items(root->right)) / sizeof(get_items(root->right)[0]);
+		}
+
+		int* array = new int[size1 + size2 + 1];
+		array[0] = a;
+
+		for (int i = 0; i < size1; i++) {
+			array[i + 1] = get_items(root->left)[i];
+		}
+		if (root->left != NULL) {
+			delete[] get_items(root->left);
+		}
+
+		for (int i = 0; i < size2; i++) {
+			array[i + 1 + size1] = get_items(root->right)[i];
+		}
+		if (root->right != NULL) {
+			delete[] get_items(root->right);
+		}
+
+		return array;
+	}
+	return NULL;
+}
 
 void BT::obhod(BinTree* root) const
 {
@@ -136,6 +180,11 @@ bool BT::contains(int key) const
 {
 	if (fobhod(root, key)) return true;
 	return false;
+}
+
+int* BT::get_items() const
+{
+	return get_items(root);
 }
 
 BinTree* BT::find_prev(BinTree* root, BinTree* elem) const
