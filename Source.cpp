@@ -10,6 +10,7 @@
 #include <conio.h>
 #include <time.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 /*
@@ -42,13 +43,17 @@ int get_key()
 
 int menu_1()
 {
-	std::cout << "Выберите, как вы хотите продолжить работу:\n";
-	std::cout << "Инвертировать изображение: Enter\nСложить с другим изображением: 1\nУмножить на другое изображение: 2\nСложить с булевским значением: 3\nУмножить на булевское значение: 4\nВычислить коэффициент заполнения изображения: 5\nВыход из прог-мы: Esc\n";
-	while (true)
-	{
-		int key = get_key();
-		if ((key == 13) || (key == 49) || (key == 50) || (key == 51) || (key == 52) || (key == 53) || (key == 27)) return key;
-	}
+	system("cls");
+	std::cout << "Меню 2:\n";
+	std::cout << "[1] - Создать дерево(до 2х деревьев может существовать одновременно)\n";
+	std::cout << "[2] - Добавить элемент в дерево\n";
+	std::cout << "[3] - Удалить текущее дерево\n";
+	std::cout << "[4] - Удалить элемент в дереве\n";
+	std::cout << "[5] - Выполнить задание\n";
+	std::cout << "[6] - Результаты тестов\n";
+	std::cout << "[->] - Следующее дерево\n";//77
+	std::cout << "[<-] - Предыдущее дерево\n";//75
+	std::cout << "[ESC] - Выход\n";
 }
 
 void print_tree(BT* tree) {
@@ -187,6 +192,161 @@ void add_item(BT* tree) {
 	}
 
 	cout << "Элемент успешно вставлен в дерево\n";
+}
+
+size_t lcg() {
+	static size_t x = 0;
+	x = (1021 * x + 24631) % 116640;
+	return x;
+}
+
+void time_of_creation(int size)
+{
+	clock_t start, end;
+	double average_time = 0;
+	int number_of_points = 100;
+
+	std::ofstream out("Node_fill.txt", std::ios::app);
+	for (int i = 0; i < number_of_points; i += 1)
+	{
+		BT tmp;
+		start = clock();
+		for (int j = 0; j < size; j++) {
+			int key = int(lcg());
+			while (tmp.contains(key) == true) {
+				key = int(lcg());
+			}
+			tmp.insert(key);
+		}
+		end = clock();
+
+		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		average_time += this_time;
+
+		if (out.is_open())
+		{
+			out << size << ";" << this_time << std::endl;
+		}
+	}
+	out.close();
+
+	average_time = average_time/number_of_points;
+	cout << number_of_points << "попыток создания дерева с " << size <<" элементами выполнено\n";
+	cout << "Среднее время составило: "<< average_time<<"\n";
+	get_key();
+}
+
+void time_of_searching(int size)
+{
+	clock_t start, end;
+	BT obj;
+	double average_time = 0;
+	int number_of_points = 1000;
+
+	for (int i = 0; i < size; i++) {
+		int key = int(lcg());
+		while (obj.contains(key) == true) {
+			key = int(lcg());
+		}
+		obj.insert(key);
+	}
+
+	std::ofstream out("Node_search.txt", std::ios::app);
+
+	for (int i = 0; i < number_of_points; i++)
+	{
+		start = clock();
+		obj.contains(int(lcg()));
+		end = clock();
+
+		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		average_time += this_time;
+
+		if (out.is_open())
+		{
+			out << size << ";" << this_time << std::endl;
+		}
+
+	}
+	out.close();
+
+	average_time = average_time / number_of_points;
+	cout << number_of_points << "попыток поиска в дереве с " << size << " элементами выполнено\n";
+	cout << "Среднее время составило: " << average_time << "\n";
+	get_key();
+}
+
+void time_of_insert(int size) {
+
+	clock_t start, end;
+	double average_time = 0;
+	int number_of_points = 1000;
+
+	std::ofstream out("Node_insert.txt", std::ios::app);
+	for (int i = 0; i < number_of_points; i++)
+	{
+		BT obj;
+		for (int j = 0; j < size; j++) {
+			int key = int(lcg());
+			while (obj.contains(key) == true) {
+				key = int(lcg());
+			}
+			obj.insert(key);
+		}
+		int key = int(lcg());
+		start = clock();
+		obj.insert(key);
+		end = clock();
+		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		average_time += this_time;
+		
+		if (out.is_open())
+		{
+			out << size << ";" << this_time << std::endl;
+		}
+		
+	}
+	out.close();
+	average_time = average_time / number_of_points;
+	cout << number_of_points << "попыток добавления в дерево с " << size << " элементами\n";
+	cout << "Среднее время составило: " << average_time << "\n";
+	get_key();
+}
+
+void time_of_erace(int size) {
+	clock_t start, end;
+	double average_time = 0;
+	int number_of_points = 1000;
+
+	std::ofstream out("Node_erase.txt", std::ios::app);
+	for (int i = 0; i < number_of_points; i++)
+	{
+		BT obj;
+		for (int j = 0; j < size; j++) {
+			int key = int(lcg());
+			while (obj.contains(key) == true) {
+				key = int(lcg());
+			}
+			obj.insert(key);
+		}
+		int key = int(lcg());
+		start = clock();
+		obj.erase(key);
+		end = clock();
+
+		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		average_time += this_time;
+
+		if (out.is_open())
+		{
+			out << size << ";" << this_time << std::endl;
+		}
+	}
+	out.close();
+	average_time = average_time / number_of_points;
+	cout << number_of_points << "попыток удаления из дерева с " << size << " элементами\n";
+	cout << "Среднее время составило: " << average_time << "\n";
+	get_key();
 }
 
 int main() {

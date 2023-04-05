@@ -50,7 +50,7 @@ private:
 	void counter(BinTree* r, int* i);
 	void get_item(BinTree* r, int** res, int* i) const;
 public:
-	BT(int value);
+	BT(int value = 10);
 	BinTree* create_as(const BinTree* copy) const;
 	BT(const BinTree& obj);
 	BinTree operator= (const BinTree& obj);
