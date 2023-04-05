@@ -46,7 +46,9 @@ private:
 	BinTree* root;
 	void obhod(BinTree* root) const;
 	BinTree* fobhod(BinTree* root, int key) const;
-	int* get_items(BinTree* r) const;
+	//int** get_items(BinTree* r) const;
+	void counter(BinTree* r, int* i);
+	void get_item(BinTree* r, int** res, int* i) const;
 public:
 	BT(int value);
 	BinTree* create_as(const BinTree* copy) const;
@@ -55,7 +57,9 @@ public:
 	void print() const;
 	bool insert(int key);
 	bool contains(int key) const;
-	int* get_items() const;
+	int power();
+	
+	void get_items(int** result) const;
 	BinTree* find_prev(BinTree* tree, BinTree* elem) const;
 	bool erase(int key);
 	void delete_all(BinTree* r);

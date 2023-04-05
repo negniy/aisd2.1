@@ -51,53 +51,42 @@ int menu_1()
 	}
 }
 
-int menu_2()
-{
-	std::cout << "Вернуться: Enter\nВыход из прог-мы: Esc\n";
-	while (true)
-	{
-		int key = get_key();
-		if ((key == 13) || (key == 27)) return key;
-	}
-}
-
 void print_tree(BT* tree) {
 	tree->print();
 }
 
 void peresech(BT* tree1, BT* tree2) {
 
-	int* array = tree1->get_items();
-	int size = 0;
-	if (array != NULL) {
-		size = sizeof(array) / sizeof(array[0]);
-	}
-	else {
+	int size1 = tree1->power();
+	int size2 = tree2->power();
+	int* result = new int[size1];
+	tree1->get_items(&result);
+	
+	if(size1 == 0 || size2 == 0) {
 		cout << "Пересечение равно пустому множеству\n";
 		return;
 	}
+
 	cout << "Пересечение равно:\n";
-	for (int i = 0; i < size; i++) {
-		if(tree2->contains(array[i])) cout << array[i] << " /";
-		cout << array[i];
+	for (int i = 0; i < size1; i++) {
+		if(tree2->contains(result[i])) cout << result[i] << " ";
 	}
 }
 
 void raznost(BT* tree1, BT* tree2) {
 
-	int* array = tree1->get_items();
-	int size = 0;
-	if (array != NULL) {
-		size = sizeof(array) / sizeof(array[0]);
-	}
-	else {
-		cout << "Разность равна:\n";
-		print_tree(tree1);
+	int size = tree1->power();
+	int* result = new int[size];
+	tree1->get_items(&result);
+
+	if (size == 0) {
+		cout << "Разность равна пустому множеству\n";
 		return;
 	}
+
 	cout << "Разность равна:\n";
 	for (int i = 0; i < size; i++) {
-		if (!tree2->contains(array[i])) cout << array[i] << " ";
+		if (!tree2->contains(result[i])) cout << result[i] << " ";
 	}
 }
 
@@ -290,7 +279,7 @@ int main() {
 				else cout << "Нет деревьев\n"; get_key();
 				break;
 			case 54:
-				menu_2();
+				menu_1();
 				break;
 			case 77:
 				if (cur < 1) cur++;

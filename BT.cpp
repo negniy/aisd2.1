@@ -13,40 +13,46 @@
 using namespace std;
 
 
-/*int* BT::get_items(BinTree* r) const
+/*int** BT::get_items(BinTree* r) const
 {
 	if (r) {
 
 		int size1 = 0;
 		int size2 = 0;
+		int** res_l = NULL;
+		int** res_r = NULL;
+		get_items(r->left);
+		get_items(r->right);
 
-		if (r->left != NULL) {
-			size1 = sizeof(get_items(r->left)) / sizeof(get_items(r->left)[0]);
+		if (res_l != NULL) {
+			size1 = sizeof(res_l) / sizeof(res_l[0]);
 		}
-		if (r->right != NULL) {
-			size2 = sizeof(get_items(r->right)) / sizeof(get_items(r->right)[0]);
+		if (res_r != NULL) {
+			size2 = sizeof(res_r) / sizeof(res_r[0]);
 		}
 
-		int* array = new int[size1 + size2 + 1];
-		array[0] = r->data;
+		int* res = new int[size1 + size2 + 1];
+		res[0] = r->data;
 
-		for (int i = 0; i < size1; i++) {
-			array[i + 1] = get_items(r->left)[i];
+		if (res_l != NULL) {
+			for (int i = 0; i < size1; i++) {
+				res[i + 1] = res_l[i];
+			}
+			delete[] res_l;
 		}
 		
-
-		for (int i = 0; i < size2; i++) {
-			array[i + 1 + size1] = get_items(r->right)[i];
+		if (res_r != NULL) {
+			for (int i = 0; i < size2; i++) {
+				res[i + 1 + size1] = res_r[i];
+			}
+			delete[] res_r;
 		}
-		
-		cout << " ";
-		for (int i = 0; i < size1 + size2 + 1; i++) {
-			cout << array[i] ;
-		}
-		return array;
 	}
-	return NULL;
 }*/
+
+void get_obhod(BinTree* r, int** res) {
+
+}
 
 void BT::obhod(BinTree* r) const
 {
@@ -181,13 +187,33 @@ bool BT::contains(int key) const
 	return false;
 }
 
-void power(BinTree* r, int counter) {
-
+void BT::counter(BinTree* r, int* i) {
+	if (r) {
+		counter(r->left, i);
+		counter(r->right, i);
+		(*i)++;
+	}
 }
 
-int* BT::get_items() const
+int BT::power() {
+	int i = 0;
+	counter(root, &i);
+	return i;
+}
+
+void BT::get_item(BinTree* r, int** res, int* i) const {
+	if (r) {
+		(*res)[*i] = r->data;
+		(*i)++;
+		get_item(r->left, res, i);
+		get_item(r->right, res, i);
+	}
+}
+
+void BT::get_items(int** res) const
 {
-	return get_items(root);
+	int i = 0;
+	get_item(root, res, &i);
 }
 
 BinTree* BT::find_prev(BinTree* r, BinTree* elem) const
