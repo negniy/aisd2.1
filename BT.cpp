@@ -50,9 +50,7 @@ using namespace std;
 	}
 }*/
 
-void get_obhod(BinTree* r, int** res) {
 
-}
 
 void BT::obhod(BinTree* r) const
 {
@@ -237,7 +235,7 @@ bool BT::erase(int key)
 
 	if (p == NULL) return false;
 
-	if (p == root) {
+	if (p == root) { // переделать
 		delete root;
 		throw error("БЕДА, МЫ УДАЛИЛИ ДЕРЕВО!");
 	}

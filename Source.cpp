@@ -13,16 +13,6 @@
 #include <fstream>
 using namespace std;
 
-/*
-В данной работе необходимо улучшить свой класс из предыдущей лабораторной работы, полностью делегировав управление памятью стандартному контейнеру.
-1. Конструктор копирования, оператор присваивания и деструктор в классе должны неявно генерироваться компилятором (см. ключевое слово default); при этом операции копирования должны выполнять глубокое клонирование объекта (т. е. внешнее поведение класса должно остаться таким же, каким и было).
-2. Внутри класса не должно остаться ни указателей, ни ручного управления памятью.
-3. В качестве поля класса должен появиться стандартный контейнер std::vector или std::list/std::forward_list (в зависимости от того, использовали вы массив или связный список в предыдущей лабораторной работе).
-4. Элементы, хранящиеся в классе, должны быть константно итерируемыми с помощью range-based for loop (for(auto i: v) {}).В частности, это означает, что вы должны определить методы begin() и end() для вашего класса и возвращать соответствующий итератор.
-5. Распечатку элементов проводить с помощью range - based for loop(for (auto i : v) { }).
-
-*/
-
 int check() {
 	int a = 0;
 	while (!(cin >> a) || (cin.peek() != '\n'))
@@ -40,21 +30,6 @@ int get_key()
 	if ((key == 0) || (key == 224)) key = _getch();
 	return key;
 };
-
-int menu_1()
-{
-	system("cls");
-	std::cout << "Меню 2:\n";
-	std::cout << "[1] - Создать дерево(до 2х деревьев может существовать одновременно)\n";
-	std::cout << "[2] - Добавить элемент в дерево\n";
-	std::cout << "[3] - Удалить текущее дерево\n";
-	std::cout << "[4] - Удалить элемент в дереве\n";
-	std::cout << "[5] - Выполнить задание\n";
-	std::cout << "[6] - Результаты тестов\n";
-	std::cout << "[->] - Следующее дерево\n";//77
-	std::cout << "[<-] - Предыдущее дерево\n";//75
-	std::cout << "[ESC] - Выход\n";
-}
 
 void print_tree(BT* tree) {
 	tree->print();
@@ -206,9 +181,9 @@ void time_of_creation(int size)
 	double average_time = 0;
 	int number_of_points = 100;
 
-	std::ofstream out("Node_fill.txt", std::ios::app);
 	for (int i = 0; i < number_of_points; i += 1)
 	{
+		if (i % 10 == 0) cout << ".";
 		BT tmp;
 		start = clock();
 		for (int j = 0; j < size; j++) {
@@ -220,20 +195,19 @@ void time_of_creation(int size)
 		}
 		end = clock();
 
-		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		double this_time = double(end - start) / double(CLOCKS_PER_SEC);
 		average_time += this_time;
 
-		if (out.is_open())
-		{
-			out << size << ";" << this_time << std::endl;
-		}
+	}
+	std::ofstream out("Node_fill.txt", std::ios::app);
+	average_time = average_time / number_of_points;
+	cout << number_of_points << "попыток добавления в дерево с " << size << " элементами\n";
+	cout << "Среднее время составило: " << average_time << "\n";
+	if (out.is_open())
+	{
+		out << size << ";" << average_time << std::endl;
 	}
 	out.close();
-
-	average_time = average_time/number_of_points;
-	cout << number_of_points << "попыток создания дерева с " << size <<" элементами выполнено\n";
-	cout << "Среднее время составило: "<< average_time<<"\n";
-	get_key();
 }
 
 void time_of_searching(int size)
@@ -251,29 +225,28 @@ void time_of_searching(int size)
 		obj.insert(key);
 	}
 
-	std::ofstream out("Node_search.txt", std::ios::app);
+	
 
 	for (int i = 0; i < number_of_points; i++)
 	{
+		if (i % 10 == 0) cout << ".";
 		start = clock();
 		obj.contains(int(lcg()));
 		end = clock();
 
-		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		double this_time = double(end - start) / double(CLOCKS_PER_SEC);
 		average_time += this_time;
 
-		if (out.is_open())
-		{
-			out << size << ";" << this_time << std::endl;
-		}
-
+	}
+	std::ofstream out("Node_search.txt", std::ios::app);
+	average_time = average_time / number_of_points;
+	cout << number_of_points << "попыток поиска в дереве с " << size << " элементами\n";
+	cout << "Среднее время составило: " << average_time << "\n";
+	if (out.is_open())
+	{
+		out << size << ";" << average_time << std::endl;
 	}
 	out.close();
-
-	average_time = average_time / number_of_points;
-	cout << number_of_points << "попыток поиска в дереве с " << size << " элементами выполнено\n";
-	cout << "Среднее время составило: " << average_time << "\n";
-	get_key();
 }
 
 void time_of_insert(int size) {
@@ -282,10 +255,11 @@ void time_of_insert(int size) {
 	double average_time = 0;
 	int number_of_points = 1000;
 
-	std::ofstream out("Node_insert.txt", std::ios::app);
 	for (int i = 0; i < number_of_points; i++)
 	{
 		BT obj;
+		if (i % 10 == 0) cout << ".";
+		if (i % 10 == 0) cout << ".";
 		for (int j = 0; j < size; j++) {
 			int key = int(lcg());
 			while (obj.contains(key) == true) {
@@ -297,20 +271,19 @@ void time_of_insert(int size) {
 		start = clock();
 		obj.insert(key);
 		end = clock();
-		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		double this_time = double(end - start) / double(CLOCKS_PER_SEC);
 		average_time += this_time;
 		
-		if (out.is_open())
-		{
-			out << size << ";" << this_time << std::endl;
-		}
-		
+	}
+	std::ofstream out("Node_insert.txt", std::ios::app);
+	average_time = average_time / number_of_points;
+	cout << number_of_points << "попыток вставки в дерево с " << size << " элементами\n";
+	cout << "Среднее время составило: " << average_time << "\n";
+	if (out.is_open())
+	{
+		out << size << ";" << average_time << std::endl;
 	}
 	out.close();
-	average_time = average_time / number_of_points;
-	cout << number_of_points << "попыток добавления в дерево с " << size << " элементами\n";
-	cout << "Среднее время составило: " << average_time << "\n";
-	get_key();
 }
 
 void time_of_erace(int size) {
@@ -318,10 +291,10 @@ void time_of_erace(int size) {
 	double average_time = 0;
 	int number_of_points = 1000;
 
-	std::ofstream out("Node_erase.txt", std::ios::app);
 	for (int i = 0; i < number_of_points; i++)
 	{
 		BT obj;
+		if (i % 10 == 0) cout << ".";
 		for (int j = 0; j < size; j++) {
 			int key = int(lcg());
 			while (obj.contains(key) == true) {
@@ -334,19 +307,100 @@ void time_of_erace(int size) {
 		obj.erase(key);
 		end = clock();
 
-		double this_time = (end - start) / (CLOCKS_PER_SEC);
+		double this_time = double(end - start) / double(CLOCKS_PER_SEC);
 		average_time += this_time;
 
-		if (out.is_open())
-		{
-			out << size << ";" << this_time << std::endl;
-		}
 	}
-	out.close();
+	std::ofstream out("Node_erase.txt", std::ios::app);
 	average_time = average_time / number_of_points;
 	cout << number_of_points << "попыток удаления из дерева с " << size << " элементами\n";
 	cout << "Среднее время составило: " << average_time << "\n";
-	get_key();
+	if (out.is_open())
+	{
+		out << size << ";" << average_time << std::endl;
+	}
+	out.close();
+}
+
+int menu_1()
+{
+	system("cls");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	setlocale(LC_ALL, "RUS");
+	while (true) {
+		system("cls");
+		std::cout << "Меню 2:\n";
+		std::cout << "[1] - Вычислить среднее время заполнения 1000 уникальными случайными числами\n";
+		std::cout << "[2] - Вычислить среднее время заполнения 10000 уникальными случайными числами\n";
+		std::cout << "[3] - Вычислить среднее время заполнения 100000 уникальными случайными числами\n";
+		std::cout << "[4] - Вычислить среднее время поиска случайного числа в заполненном контейнере из 1000 элементов\n";
+		std::cout << "[5] - Вычислить среднее время поиска случайного числа в заполненном контейнере из 10000 элементов\n";
+		std::cout << "[6] - Вычислить среднее время поиска случайного числа в заполненном контейнере из 100000 элементов\n";
+		std::cout << "[7] - Вычислить среднее время добавления случайного числа для заполненного контейнера из 1000 элементов\n";
+		std::cout << "[8] - Вычислить среднее время добавления случайного числа для заполненного контейнера из 10000 элементов\n";
+		std::cout << "[9] - Вычислить среднее время добавления случайного числа для заполненного контейнера из 100000 элементов\n";
+		std::cout << "[q] - Вычислить среднее время удаления случайного числа для заполненного контейнера из 1000 элементов\n";
+		std::cout << "[w] - Вычислить среднее время удаления случайного числа для заполненного контейнера из 10000 элементов\n";
+		std::cout << "[e] - Вычислить среднее время удаления случайного числа для заполненного контейнера из 100000 элементов\n";
+		std::cout << "[ESC] - Выход\n";
+
+		int m = get_key();
+
+		switch (m)
+		{
+		case 49:
+			time_of_creation(1000);
+			get_key();
+			break;
+		case 50:
+			time_of_creation(10000);
+			get_key();
+			break;
+		case 51:
+			time_of_creation(100000);
+			get_key();
+			break;
+		case 52:
+			time_of_searching(1000);
+			get_key();
+			break;
+		case 53:
+			time_of_searching(10000);
+			get_key();
+			break;
+		case 54:
+			time_of_searching(100000);
+			get_key();
+			break;
+		case 55:
+			time_of_insert(1000);
+			get_key();
+			break;
+		case 56:
+			time_of_insert(10000);
+			get_key();
+			break;
+		case 57:
+			time_of_insert(100000);
+			get_key();
+			break;
+		case 113:
+			time_of_erace(1000);
+			get_key();
+			break;
+		case 119:
+			time_of_erace(10000);
+			get_key();
+			break;
+		case 101:
+			time_of_erace(10000);
+			get_key();
+			break;
+		case 27:
+			return 0;
+		}
+	}
 }
 
 int main() {
