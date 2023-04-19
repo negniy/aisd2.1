@@ -52,19 +52,24 @@ using namespace std;
 
 
 
-void BT::obhod(BinTree* r) const
+void BT::obhod(BinTree* r, int level) const
 {
-	if (r) {
-		obhod(r->left);
-		cout << r->data<< " ";
-		obhod(r->right);
+	if (r)
+	{
+		if (r)
+		{
+			obhod(r->right, level + 1);
+			for (int i = 0; i < level; i++) cout << "      ";
+			cout << r->data << endl;
+			obhod(r->left, level + 1);
+		}
 	}
 }
 
 BinTree* BT::fobhod(BinTree* r, int key) const
 {
 	if (r) {
-		if (key == r->data) return root;
+		if (key == r->data) return r;
 		BinTree* a = fobhod(r->left, key);
 		BinTree* b = fobhod(r->right, key);
 		if (a != NULL) return a;
@@ -144,7 +149,7 @@ BinTree BT::operator=(const BinTree& obj)
 
 void BT::print() const
 {
-	obhod(root);
+	obhod(root, 3);
 }
 
 bool BT::insert(int key)
@@ -217,7 +222,7 @@ void BT::get_items(int** res) const
 BinTree* BT::find_prev(BinTree* r, BinTree* elem) const
 {
 	if (r) {
-		if (elem == root->left || elem == root->right) return root;
+		if (elem == r->left || elem == r->right) return r;
 		BinTree* a = find_prev(r->left, elem);
 		BinTree* b = find_prev(r->right, elem);
 		if (a != NULL) return a;
@@ -235,7 +240,7 @@ bool BT::erase(int key)
 
 	if (p == NULL) return false;
 
-	if (p == root) { // ïåðåäåëàòü
+	if (p == root && root->left==NULL && root->right==NULL) {
 		delete root;
 		throw error("ÁÅÄÀ, ÌÛ ÓÄÀËÈËÈ ÄÅÐÅÂÎ!");
 	}
@@ -254,28 +259,39 @@ bool BT::erase(int key)
 	}
 
 	if (p->left == NULL && p->right == NULL)
-		{
-			BinTree* tmp = find_prev(root, p);
-			if (tmp->left == p) {
-				tmp->left = NULL;
-			}
-			if (tmp->right == p) {
-				tmp->right = NULL;
-			}
-			delete p;
-			return true;
+	{
+		BinTree* tmp = find_prev(root, p);
+		if (tmp->left == p) {
+			tmp->left = NULL;
 		}
+		if (tmp->right == p) {
+			tmp->right = NULL;
+		}
+		delete p;
+		return true;
+	}
 
 	if (p->left != NULL || p->right != NULL)
 	{
 		BinTree* tmp = find_prev(root, p);
-		if (p->left != NULL) {
-			if(p==tmp->left) tmp->left = p->left;
-			else tmp->right = p->left;
+		if (!tmp) {
+			if (p->left != NULL) {
+				root = p->left;
+			}
+			else {
+				root = p->right;
+			}
 		}
 		else {
-			if (p == tmp->left) tmp->left = p->right;
-			else tmp->right = p->right;
+			if (p->left != NULL) {
+				if(p==tmp->left) tmp->left = p->left;
+				else tmp->right = p->left;
+			}
+			else {
+				if (p == tmp->left) tmp->left = p->right;
+				else tmp->right = p->right;
+			}
+
 		}
 		delete p;
 		return true;

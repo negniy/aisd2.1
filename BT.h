@@ -44,7 +44,7 @@ class BT
 { 
 private:
 	BinTree* root;
-	void obhod(BinTree* root) const;
+	void obhod(BinTree* root, int level) const;
 	BinTree* fobhod(BinTree* root, int key) const;
 	//int** get_items(BinTree* r) const;
 	void counter(BinTree* r, int* i);
@@ -58,7 +58,6 @@ public:
 	bool insert(int key);
 	bool contains(int key) const;
 	int power();
-	
 	void get_items(int** result) const;
 	BinTree* find_prev(BinTree* tree, BinTree* elem) const;
 	bool erase(int key);
