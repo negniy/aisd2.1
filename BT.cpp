@@ -56,13 +56,10 @@ void BT::obhod(BinTree* r, int level) const
 {
 	if (r)
 	{
-		if (r)
-		{
-			obhod(r->right, level + 1);
-			for (int i = 0; i < level; i++) cout << "      ";
-			cout << r->data << endl;
-			obhod(r->left, level + 1);
-		}
+		obhod(r->right, level + 1);
+		for (int i = 0; i < level; i++) cout << "      ";
+		cout << r->data << endl;
+		obhod(r->left, level + 1);
 	}
 }
 

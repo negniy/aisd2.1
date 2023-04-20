@@ -72,33 +72,36 @@ void raznost(BT* tree1, BT* tree2) {
 
 void task(BT* tree1, BT* tree2) {
 
-	system("cls");
-	cout << "Первое дерево: \n";
-	print_tree(tree1);
-	cout << "\nВторое дерево: \n";
-	print_tree(tree2);
+	while (true) {
 
-	std::cout << "\nВыберите действие:\n";
-	std::cout << "[1] - Найти пересечение\n";
-	std::cout << "[2] - Найти разность\n";
+		system("cls");
+		cout << "Первое дерево: \n";
+		print_tree(tree1);
+		cout << "\nВторое дерево: \n";
+		print_tree(tree2);
 
-	int m = get_key();
+		std::cout << "\nВыберите действие:\n";
+		std::cout << "[1] - Найти пересечение\n";
+		std::cout << "[2] - Найти разность\n";
 
-	switch (m)
-	{
-	case 49:
-		peresech(tree1, tree2);
-		break;
-	case 50:
-		std::cout << "Выберите действие:\n";
-		std::cout << "[1] - Вычесть из первого множества второе\n";
-		std::cout << "[2] - Вычесть из второго множества первое\n";
-		int m1 = get_key();
-		if (m1 == 49) raznost(tree1, tree2);
-		if (m1 == 50) raznost(tree2, tree1);
-		break;
+		int m = get_key();
+
+		switch (m)
+		{
+		case 49:
+			peresech(tree1, tree2);
+			break;
+		case 50:
+			std::cout << "Выберите действие:\n";
+			std::cout << "[1] - Вычесть из первого множества второе\n";
+			std::cout << "[2] - Вычесть из второго множества первое\n";
+			int m1 = get_key();
+			if (m1 == 49) raznost(tree1, tree2);
+			if (m1 == 50) raznost(tree2, tree1);
+			break;
+		}
+		get_key();
 	}
-	get_key();
 }
 
 bool delete_item(BT* tree) {
@@ -199,15 +202,11 @@ void time_of_creation(int size)
 		average_time += this_time;
 
 	}
-	std::ofstream out("Node_fill.txt", std::ios::app);
+	
 	average_time = average_time / number_of_points;
 	cout << number_of_points << "попыток добавления в дерево с " << size << " элементами\n";
 	cout << "Среднее время составило: " << average_time << "\n";
-	if (out.is_open())
-	{
-		out << size << ";" << average_time << std::endl;
-	}
-	out.close();
+	
 }
 
 void time_of_searching(int size)
@@ -238,15 +237,11 @@ void time_of_searching(int size)
 		average_time += this_time;
 
 	}
-	std::ofstream out("Node_search.txt", std::ios::app);
+	
 	average_time = average_time / number_of_points;
 	cout << number_of_points << "попыток поиска в дереве с " << size << " элементами\n";
 	cout << "Среднее время составило: " << average_time << "\n";
-	if (out.is_open())
-	{
-		out << size << ";" << average_time << std::endl;
-	}
-	out.close();
+	
 }
 
 void time_of_insert(int size) {
@@ -275,15 +270,11 @@ void time_of_insert(int size) {
 		average_time += this_time;
 		
 	}
-	std::ofstream out("Node_insert.txt", std::ios::app);
+	
 	average_time = average_time / number_of_points;
 	cout << number_of_points << "попыток вставки в дерево с " << size << " элементами\n";
 	cout << "Среднее время составило: " << average_time << "\n";
-	if (out.is_open())
-	{
-		out << size << ";" << average_time << std::endl;
-	}
-	out.close();
+	
 }
 
 void time_of_erace(int size) {
@@ -311,15 +302,11 @@ void time_of_erace(int size) {
 		average_time += this_time;
 
 	}
-	std::ofstream out("Node_erase.txt", std::ios::app);
+	
 	average_time = average_time / number_of_points;
 	cout << number_of_points << "попыток удаления из дерева с " << size << " элементами\n";
 	cout << "Среднее время составило: " << average_time << "\n";
-	if (out.is_open())
-	{
-		out << size << ";" << average_time << std::endl;
-	}
-	out.close();
+	
 }
 
 int menu_1()
@@ -489,8 +476,8 @@ int main() {
 				else cout << "Удаление невозможно\n"; get_key();
 				break;
 			case 53:
-				if (cur > -1 && cur < 2) task(array[0], array[1]);
-				else cout << "Нет деревьев\n"; get_key();
+				if (cur > -1 && cur < 2 && size==2) task(array[0], array[1]);
+				else cout << "Недостаточно деревьев\n"; get_key();
 				break;
 			case 54:
 				menu_1();
